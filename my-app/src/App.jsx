@@ -5,38 +5,36 @@ import {
   OrbitControls,
   PerspectiveCamera,
   Environment,
+  useEnvironment,
 } from "@react-three/drei";
 
-function Scene() {
+function ThreeScene() {
+  const { environment } = useEnvironment();
   return (
     <>
       <OrbitControls target={[0, 0.35, 0]} maxPolarAngle={1.45} />
       <PerspectiveCamera makeDefault fov={50} position={[3, 2, 5]} />
 
-      <Environment background>
-        <mesh>
-          <sphereGeometry args={[50, 100, 100]} />
-          <meshBasicMaterial color='#84f74f' side={THREE.BackSide} />
-        </mesh>
-      </Environment>
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshBasicMaterial color={"yellow"} />
+      </mesh>
 
-      <Environment background>
-        <mesh scale='100'>
-          <sphereGeometry args={[1, 64, 64]} />
-          <meshBasicMaterial color='#84f74f' side={THREE.BackSide} />
-        </mesh>
-      </Environment>
+      {environment && <primitive object={environment.scene} />}
     </>
   );
 }
 
 function App() {
   return (
-    <Suspense fallback={null}>
-      <Canvas>
-        <Scene />
-      </Canvas>
-    </Suspense>
+    <Canvas>
+      <Environment
+        background
+        files={["px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"]}
+        path='/'
+      />
+      <ThreeScene />
+    </Canvas>
   );
 }
 

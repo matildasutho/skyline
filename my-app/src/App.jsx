@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import "./App.css";
 import {
@@ -11,10 +11,19 @@ import {
   useAspect,
   useCubeTexture,
 } from "@react-three/drei";
+import video from "/WZRD-skyline-test.mp4";
 
 function ThreeScene() {
   const { environment } = useEnvironment();
-  const { videoTexture } = useVideoTexture("/360-VR-video.mp4"); //create function to load and play video as texture?? import?
+  const { videoTexture } = useVideoTexture("/WZRD-skyline-test.mp4"); //create function to load and play video as texture?? import?
+  const videoRef = useRef();
+
+  // useEffect(() => {
+  //   if (videoRef.current) {
+  //     videoRef.current.play();
+  //   }
+  // }, []);
+
   return (
     <>
       <OrbitControls />
@@ -22,14 +31,14 @@ function ThreeScene() {
 
       <mesh>
         <boxGeometry args={[200, 200, 200]} />
-        <meshStandardMaterial map={videoTexture} side={THREE.BackSide} />
+        <meshStandardMaterial map={videoTexture} side={THREE.DoubleSide} />
       </mesh>
-
-      <mesh>
-        <planeGeometry args={[45, 25]} />
-        <meshStandardMaterial map={videoTexture} toneMapped={false} />
-      </mesh>
-
+      <Suspense fallback={<FallbackMaterial url='/ny.png' />}>
+        <mesh>
+          <planeGeometry args={[45, 25]} />
+          <VideoMaterial url={video} side={THREE.DoubleSide} />
+        </mesh>
+      </Suspense>
       {environment && <primitive object={environment.scene} />}
 
       <Environment
@@ -39,6 +48,16 @@ function ThreeScene() {
       />
     </>
   );
+}
+
+function VideoMaterial({ url }) {
+  const texture = useVideoTexture(url);
+  return <meshBasicMaterial map={texture} toneMapped={false} />;
+}
+
+function FallbackMaterial({ url }) {
+  const texture = useTexture(url);
+  return <meshBasicMaterial map={texture} toneMapped={false} />;
 }
 
 function App() {

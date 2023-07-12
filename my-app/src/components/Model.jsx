@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
-
+//figure out moving the entire object
 export default function Model(props) {
   const { nodes, materials } = useGLTF("/free_buick_riviera_car/scene.glb");
   return (
     <group {...props} dispose={null}>
-      <group position={[0.1, 0.343, 1]} rotation={[-1.6, 0, -3.1]}>
+      <group position={[-0.089, 0.243, -0.001]} rotation={[-1.571, 0, 0]}>
         <group
           position={[0.002, 0.082, 0.397]}
           rotation={[-Math.PI / 2, 0, -Math.PI]}

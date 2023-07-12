@@ -21,28 +21,30 @@ function CurvedPlane({ width, height, radius, children, ...props }) {
   );
 }
 
-function curvedPlaneGeometry(width = 1, height = 1, radius = 2) {
-  const segments = 32;
-  const segmentsH = segments;
-  const segmentsV = segments / (width / height); // square
-  const geometry = new THREE.PlaneGeometry(width, height, segmentsH, segmentsV);
+function curvedPlaneGeometry(width = 2, height = 2, radius = 1) {
+  const segments = 100;
+  const geometry = new THREE.PlaneGeometry(
+    radius * 2,
+    radius * 2,
+    segments,
+    segments
+  );
 
-  let heightMin = Infinity;
-  let heightMax = -Infinity;
-
-  const distanceMax = Math.sqrt((width / 2) ** 2 + (height / 2) ** 2);
-  radius = Math.max(distanceMax, radius);
+  let heightMin = -radius;
+  let heightMax = radius;
 
   const position = geometry.attributes.position;
   for (let i = 0; i < position.count; i++) {
     const x = position.getX(i);
     const y = position.getY(i);
 
-    const distance = Math.sqrt(x * x + y * y);
-    const height = Math.sqrt(Math.max(radius ** 2 - distance ** 2, 0));
-    heightMin = Math.min(height, heightMin);
-    heightMax = Math.max(height, heightMax);
-    position.setZ(i, height);
+    const theta = Math.atan2(y, x);
+    const phi = Math.PI - Math.acos(Math.sqrt(x * x + y * y) / radius);
+
+    const vertex = new THREE.Vector3();
+    vertex.setFromSphericalCoords(radius, phi, theta);
+
+    position.setXYZ(i, vertex.x, vertex.y, vertex.z);
   }
 
   // geometry.computeVertexNormals()

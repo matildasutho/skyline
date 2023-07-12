@@ -29,8 +29,8 @@ function ThreeScene() {
   const [video, setVideo] = useState();
 
   const ratio = 16 / 9;
-  const width = 50;
-  const radius = 4;
+  const width = 200;
+  const radius = 200;
   const z = 4;
 
   const r = useMemo(
@@ -47,7 +47,7 @@ function ThreeScene() {
         <boxGeometry args={[200, 200, 200]} />
         <meshStandardMaterial map={videoTexture} side={THREE.DoubleSide} />
       </mesh> */}
-      <CurvedPlane width={width} height={width / r} radius={radius}>
+      <CurvedPlane width={width} height={width} radius={radius}>
         <Suspense
           fallback={<meshStandardMaterial side={THREE.DoubleSide} wireframe />}
         >

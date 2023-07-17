@@ -5,6 +5,8 @@ import {
   useEnvironment,
   useVideoTexture,
   useTexture,
+  MeshDistortMaterial,
+  useCubeTexture,
 } from "@react-three/drei";
 import src from "/360-VR-video.mp4";
 
@@ -30,17 +32,36 @@ export default function Space() {
     () => (video ? video.videoWidth / video.videoHeight : ratio),
     [video, ratio]
   );
-
+  const bumpMap = useTexture("/nx.png");
+  const envMap = useCubeTexture(
+    ["px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"],
+    { path: "/" }
+  );
+  const [material, set] = useState();
   return (
     <>
       <mesh>
-        <sphereGeometry args={[500, 500, 500]} />
-        <VideoMaterial src={src} setVideo={setVideo} />
+        <sphereGeometry args={[50, 50, 50]} />
+        <MeshDistortMaterial
+          side={THREE.BackSide}
+          ref={set}
+          envMap={envMap}
+          bumpMap={bumpMap}
+          color={"#82f74f"}
+          roughness={0.1}
+          metalness={1}
+          bumpScale={0.005}
+          clearcoat={1}
+          clearcoatRoughness={1}
+          radius={1}
+          distort={0.4}
+        />
+        {/* <VideoMaterial src={src} setVideo={setVideo} /> */}
       </mesh>
-      {environment && <primitive object={environment.scene} />}
-      <mesh>
+      {/* {environment && <primitive object={environment.scene} />} */}
+      {/* <mesh>
         <Environment background color={"blue"} />
-      </mesh>
+      </mesh> */}
     </>
   );
 }

@@ -16,3 +16,12 @@ canvas {
   height: 100%;
   /* background-color: pink; */
 }
+
+input {
+  color: red;
+  background-color: yellow;
+  position: absolute;
+  z-index: 50;
+  top: 10;
+  left: 10px;
+}

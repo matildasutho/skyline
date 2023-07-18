@@ -34,6 +34,7 @@ export default function Space() {
   // );
 
   //mesh distortion material
+
   const bumpMap = useTexture("/nx.png");
   const envMap = useCubeTexture(
     ["px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"],

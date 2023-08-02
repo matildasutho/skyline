@@ -2,7 +2,6 @@
   box-sizing: border-box;
 }
 
-html,
 body,
 #root {
   width: 100vw;
@@ -24,4 +23,16 @@ input {
   z-index: 50;
   top: 10;
   left: 10px;
+}
+.AudioSwitch {
+  color: black;
+  height: 150px;
+  width: 150px;
+  font-family: "Courier New", Courier, monospace;
+  background-color: rgb(142, 142, 142);
+  border: 1px solid black;
+  border-radius: 75px;
+  position: absolute;
+  left: -650px;
+  bottom: -330px;
 }

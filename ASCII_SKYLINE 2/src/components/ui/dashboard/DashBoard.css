@@ -1,0 +1,10 @@
+.dashStyle {
+    width: 400px;
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    background-color: pink;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

@@ -1,34 +1,30 @@
-import * as THREE from "three";
-import React, { Suspense, useRef, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+// import * as THREE from "three";
+import React, { Suspense, useRef } from "react";
+import { Canvas } from "@react-three/fiber";
 import {
   OrbitControls,
   PerspectiveCamera,
-  PositionalAudio,
+  AsciiRenderer,
 } from "@react-three/drei";
 import { VRButton, XR, Controllers } from "@react-three/xr";
-import {
-  EffectComposer,
-  DepthOfField,
-  Bloom,
-  Noise,
-  Vignette,
-} from "@react-three/postprocessing";
 import "./App.css";
 import Space from "./components/Space.jsx";
-import Model from "./components/Model.jsx";
-import { PlaySound } from "./components/LoadTracks.jsx";
+import DataProvider from "./components/DataContext.jsx";
+
 
 function ThreeScene() {
   return (
     <>
+      <ambientLight color={[0.1, 0.05, 0.05]} />
+      <pointLight position={[0, 10, 10]} intensity={0.4} color={[0, 0, 1]} />
       <OrbitControls maxDistance={[0.1]} />
-      <PerspectiveCamera makeDefault fov={50} position={[-0.05, 0.05, 1]} />
-      <Model
-        scale={0.5}
-        position={[-2, -12, -8]}
-        rotation={[0, -0.15, 0]}
-      ></Model>
+      <PerspectiveCamera makeDefault fov={50} position={[0, 0, 1.7]} />
+      <AsciiRenderer
+        bgColor={"rgb(142, 142, 142)"}
+        fgColor={"rgb(0, 0, 0)"}
+        characters={"*~!#`_=+/©ø∂†∫.,º•ª§∞πøˆ¨¥†®°´}{"}
+      /> 
+      {/* The Space component to be used with the ASCII effect */}
       <Space />
     </>
   );
@@ -37,41 +33,26 @@ function ThreeScene() {
 function App() {
   return (
     <>
-      <VRButton />
-      <Canvas
-        camera={{ position: [0, 0, 3] }}
-        gl={{
-          powerPreference: "high-performance",
-          alpha: false,
-          antialias: false,
-          stencil: false,
-          depth: false,
-        }}
-      >
-        <XR>
-          <PlaySound url='/Asphalt.mp3' />
-          <Controllers />
-          <Suspense fallback={null}>
-            <ThreeScene />
-          </Suspense>
-          <EffectComposer multisampling={0} disableNormalPass={true}>
-            <DepthOfField
-              focusDistance={0}
-              focalLength={0.02}
-              bokehScale={2}
-              height={200}
-            />
-            <Bloom
-              luminanceThreshold={0}
-              luminanceSmoothing={1}
-              height={300}
-              opacity={1}
-            />
-            <Noise opacity={0.025} />
-            <Vignette eskil={false} offset={0.1} darkness={0.2} />
-          </EffectComposer>
-        </XR>
-      </Canvas>
+      <DataProvider>
+        {/* <VRButton /> */}
+        <Canvas
+          camera={{ position: [0, 0, 3] }}s
+          gl={{
+            powerPreference: "high-performance",
+            alpha: false,
+            antialias: false,
+            stencil: false,
+            depth: false,
+          }}
+        >
+          <XR>
+            <Controllers />
+            <Suspense fallback={null}>
+              <ThreeScene />
+            </Suspense>
+          </XR>
+        </Canvas>
+      </DataProvider>
     </>
   );
 }

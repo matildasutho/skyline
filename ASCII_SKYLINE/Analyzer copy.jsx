@@ -25,7 +25,6 @@ export default function Analyzer({ sound }) {
     });
     // create function to update value with seconds?
     const foreGround = "rgb(255, 0, " + dataAv + ")";
-
     const backGround = "rgb(0, 255, 255)";
 // try placing the renderer in a useEffect hook?
     return (

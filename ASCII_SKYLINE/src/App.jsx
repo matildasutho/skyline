@@ -11,7 +11,7 @@ import "./App.css";
 import Space from "./components/Space.jsx";
 import DataProvider from "./components/DataContext.jsx";
 import PlaySound from "./components/PlaySound";
-import Effects from "./components/Effects.jsx";
+
 
 function ThreeScene() {
     return (
@@ -20,10 +20,9 @@ function ThreeScene() {
             <pointLight position={[0, 10, 0]} intensity={[1]} color="blue" />
             <PerspectiveCamera makeDefault fov={50} position={[0, 0, 0.1]} />
             <OrbitControls maxDistance={[0.1]} />
-            <Effects />
+
             {/* The Space component to be used with the ASCII effect */}
             <Space />
-            <PlaySound />
         </>
     );
 }
@@ -49,6 +48,7 @@ function App() {
                             <ThreeScene />
                         </Suspense>
                     </XR>
+                    <PlaySound />
                 </Canvas>
             </DataProvider>
         </>

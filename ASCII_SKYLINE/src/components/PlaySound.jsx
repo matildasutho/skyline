@@ -24,7 +24,6 @@ const [characters, setCharacters] = useState(".,*~!#`_=+/†º•ª§∞πøˆ¨
     const toggleSound = () => {
         setIsPlaying(!isPlaying);
         isPlaying ? sound.current.pause() : sound.current.play();
-        isPlaying ? stateView = "active" : stateView = "";
     };
 
     const handleNextTrack = () => {

@@ -10,7 +10,7 @@ import { VRButton, XR, Controllers } from "@react-three/xr";
 import "./App.css";
 import Space from "./components/Space.jsx";
 import DataProvider from "./components/DataContext.jsx";
-import Player from "./components/Player";
+import Player from "./components/player/Player";
 
 function ThreeScene() {
     return (

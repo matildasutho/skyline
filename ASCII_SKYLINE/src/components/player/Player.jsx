@@ -32,6 +32,16 @@ export default function PlaySound() {
         }
     }, [currentTime, isPlaying]);
 
+    useEffect(() => {
+        if (sound.current) {
+            sound.current.currentTime = currentTime;
+            sound.current.onpause = () => {
+                setIsPlaying(false);
+            };
+            sound.current?.play();
+        }
+    }, [currentTime]);
+
     // useEffect(() => {
     //     sound.current = sound.current || {}; // Ensure sound.current is an object
     //     sound.current.currentTime = 0; // Set an initial value for currentTime if needed
@@ -62,7 +72,7 @@ export default function PlaySound() {
     // useEffect hook to handle audio playback when the track changes
     useEffect(() => {
         if (isChangingTrack) {
-            sound.current.play();
+            sound.current?.play();
             setIsChangingTrack(false); // Reset the flag after track change is completed
         }
     }, [isChangingTrack]);

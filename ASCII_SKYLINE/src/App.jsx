@@ -10,8 +10,7 @@ import { VRButton, XR, Controllers } from "@react-three/xr";
 import "./App.css";
 import Space from "./components/Space.jsx";
 import DataProvider from "./components/DataContext.jsx";
-import PlaySound from "./components/PlaySound";
-
+import Player from "./components/Player";
 
 function ThreeScene() {
     return (
@@ -48,7 +47,7 @@ function App() {
                             <ThreeScene />
                         </Suspense>
                     </XR>
-                    <PlaySound />
+                    <Player />
                 </Canvas>
             </DataProvider>
         </>

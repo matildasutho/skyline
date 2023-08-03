@@ -1,0 +1,163 @@
+/* @font-face {
+  font-family: "IBMPlex", "Sans Medium";
+  src: url("../fonts/IBMPlexSans-Medium.woff");
+} */
+
+:root {
+  --accent: rgb(161, 219, 231);
+  --outline: black;
+  --main-text: rgb(0, 0, 0);
+  --sub-text: rgb(87, 87, 87);
+  --secondary: rgb(135, 135, 135);
+}
+
+.full-width {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* .playsound-cont {
+  position: absolute;
+  right: -300px;
+  bottom: 0;
+} */
+
+.container {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  background-color: rgb(142, 142, 142);
+  border: 1px solid var(--outline);
+  border-radius: 10px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  padding: 3px;
+  margin: 10px;
+  color: var(--sub-text);
+  position: absolute;
+  left: 0vw;
+  bottom: 0;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.link {
+  width: 60px;
+  height: 30px;
+  padding: 3px;
+  border: 0.5px solid black;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.casette {
+  width: 170px;
+  height: 20px;
+  border: 0.5px solid black;
+  border-radius: 2px;
+  text-align: center;
+  padding: 1px;
+  margin-top: 5px;
+  background-color: var(--secondary);
+  font-family: 'Audiowide', cursive;
+  /* color: rgba(255, 255, 255, 0.9); */
+  font-size: 0.8rem;
+}
+
+.label {
+  width: 200px;
+  height: 25px;
+  padding-top: 1px;
+  border: 0.5px solid black;
+  border-radius: 2px;
+  background: var(--secondary);
+  /* color: white; */
+  overflow: hidden;
+}
+
+.scrollbar {
+
+  position: relative;
+  animation: 15s scroll linear infinite;
+}
+
+.ff_button,
+.rew_button {
+  width: 80px;
+  height: 30px;
+  padding: 2px;
+  margin: var(--btn-margin);
+  border: 0.5px solid black;
+  /* color: var(--main-text); */
+  background-color: rgb(1, 1, 1, 0);
+  border-radius: 5px;
+}
+
+.ff_cont {
+  border: 0.5px solid black;
+  height: 70px;
+}
+
+span {
+  margin: var(--btn-margin);
+  text-align: center;
+}
+
+.track_button {
+  background-color: var(--sub-text);
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  padding-top: 4px;
+  color: var(--accent);
+  font-family: 'Audiowide', cursive;
+  margin: 3px 1px;
+}
+
+button {
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+.active {
+  background-color: var(--accent);
+}
+
+/* button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+} */
+.link:hover {
+    border-color: var(--accent);
+    background-color: var(--accent);
+    background-blend-mode: lighten;
+}
+#toggleIcon {
+  opacity: 0.9;
+  position: relative;
+  width: 35px;
+}
+
+@keyframes scroll {
+  0% {
+    left: 200px;
+  }
+
+  100% {
+    left: -200px;
+  }
+}

@@ -4,7 +4,12 @@ import { useRef, useState, useEffect } from "react";
 import { useData } from "./DataContext";
 import { AsciiRenderer } from "@react-three/drei";
 
-export default function Analyzer({ sound, backGround, foreGround, characTers }) {
+export default function Analyzer({
+    sound,
+    backGround,
+    foreGround,
+    characTers,
+}) {
     const analyser = useRef();
     const { dataAv, data, setData } = useData(); // Get the setData function from the context and import the data value!!
     const toggleSound = useState();
@@ -19,7 +24,7 @@ export default function Analyzer({ sound, backGround, foreGround, characTers }) 
             const dataAv = analyser.current.getAverageFrequency();
             setData(data, dataAv);
 
-            console.log(dataAv);
+            // console.log(dataAv);
             // Update the data value in the context with the new value
         }
     });
@@ -27,7 +32,7 @@ export default function Analyzer({ sound, backGround, foreGround, characTers }) 
     // const foreGround = "rgb(255, 0, 0)";
 
     // const backGround = "rgb(0, 255, 255)";
-// try placing the renderer in a useEffect hook?
+    // try placing the renderer in a useEffect hook?
     return (
         <>
             <AsciiRenderer

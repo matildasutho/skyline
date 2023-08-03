@@ -1,137 +1,128 @@
-import React, { Suspense, useRef, useState, useEffect } from "react";
-// import { useFrame } from "@react-three/fiber";
-import { PositionalAudio, Html, RoundedBox } from "@react-three/drei";
-// import { useData } from "./DataContext";
+import React, { Suspense, useRef, useState } from "react";
+import { PositionalAudio } from "@react-three/drei";
+import DashBoard from "./ui/dashboard/DashBoard.jsx";
+import Analyzer from "./Analyzer.jsx";
+import "./ui/dashboard/DashBoard.css";
 
-// export function Analyzer({ sound }) {
-//   const mesh = useRef();
-//   const analyser = useRef();
-//   const { dataAv, data, setData } = useData(); // Get the setData function from the context and import the data value!!
-//   const toggelSound = useState();
+export default function PlaySound() {
+    const tracks = [
+        "/tracks/Asphalt.mp3",
+        "/tracks/City Report.mp3",
+        "/tracks/Morning Shift.mp3",
+        "/tracks/Skyline.mp3",
+        "/tracks/Skyline (Privacy Remix).mp3",
+    ];
 
-//   useEffect(() => {
-//     analyser.current = new THREE.AudioAnalyser(sound.current, 32);
-//   }, [sound]);
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+    const sound = useRef();
+    const [isPlaying, setIsPlaying] = useState(false);
+    const stateView = useState();
+    const [foreground, setForeground] = useState("rgb(0, 0, 255)"); // Default foreground color (red)
+    const [background, setBackground] = useState("rgb(190, 190, 190)"); // Default background color (cyan)
+    const [characters, setCharacters] = useState(
+        ".,*~!#`_=+/†º•ª§∞πøˆ¨¥†®°´}{"
+    );
 
-//   useFrame(() => {
-//     if (analyser.current) {
-//       const data = analyser.current.getFrequencyData();
-//       const dataAv = analyser.current.getAverageFrequency();
-//       setData(data, dataAv); // Update the data value in the context with the new value
-//       //   console.log(data); //get this value out of the function?
-//       // console.log(dataAv);
-//     }
-//   });
-// }
+    const toggleSound = () => {
+        setIsPlaying(!isPlaying);
+        isPlaying ? sound.current.pause() : sound.current.play();
+    };
 
-export function PlaySound() {
-  const mod = (n, r) => ((n % r) + r) % r;
+    const handleNextTrack = () => {
+        // sound.current.pause();
+        setCurrentTrackIndex((prevIndex) => (prevIndex + 1) % tracks.length);
+        sound.current.currentTime = 0;
+        sound.current.play();
+    };
 
-  function* stepGen(steps) {
-    let index = 0;
-    while (true) {
-      index = mod(index, steps.length);
-      console.log(index);
-    }
-  }
-  const tracks = [
-    "/tracks/Asphalt.mp3",
-    "/tracks/City Report.mp3",
-    "/tracks/Morning Shift.mp3",
-    "/tracks/Skyline.mp3",
-    "/tracks/Skyline (Privacy Remix).mp3",
-  ];
-  const [gen, setGen] = useState(() => stepGen(tracks));
-  const getPrev = () => gen.next(-1).value;
-  const getNext = () => gen.next(1).value;
+    const handlePrevTrack = () => {
+        // sound.current.pause();
+        setCurrentTrackIndex(
+            (prevIndex) => (prevIndex - 1 + tracks.length) % tracks.length
+        );
+        sound.current.currentTime = 0;
+        sound.current.play();
+    };
 
-  // const init = getNext();
+    const handleColorChange = (colorType, palette) => {
+        switch (colorType) {
+            case "background":
+                setBackground(palette.background);
+                setForeground(palette.foreground);
+                setCharacters(palette.characters);
+                break;
+            // Add more cases for additional color options if needed
+            default:
+                break;
+        }
+    };
+    const url = tracks[currentTrackIndex];
+    console.log(tracks, currentTrackIndex);
 
-  // const [current, setCurrent] = useState(init);
-  const init = getNext();
+    const display = url.replace("/tracks/", "").replace(".mp3", " - RADIOFEAR");
 
-  const reWind = () => {
-    const prev = getPrev();
-    setCurrent(prev);
-  };
-  const fastForward = () => {
-    const next = getNext();
-    setCurrent(next);
-  };
+    return (
+        <>
+            <Suspense fallback={null}>
+                <PositionalAudio url={tracks[currentTrackIndex]} ref={sound} />
+                <Analyzer
+                    sound={sound}
+                    backGround={background}
+                    foreGround={foreground}
+                    characTers={characters}
+                />
+            </Suspense>
 
-  const [current, setCurrent] = useState(init);
-
-  const sound = useRef();
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const toggleSound = () => {
-    setIsPlaying(!isPlaying);
-    isPlaying ? sound.current.pause() : sound.current.play();
-  };
-
-  const url = current;
-  const AudioSwitch = React.forwardRef((props, ref) => (
-    <mesh>
-      <RoundedBox args={[16, 9, 1]} position={[0, 0, 5]} />
-      <meshBasicMaterial color='pink'></meshBasicMaterial>
-      <Html position={[0, 0, -30]} transform sprite fullscreen>
-        <div className='container'>
-          <div className='vertical full-width'>
-            <div className='horizontal'>
-              <span className='casette'>SKYLINE</span>
-              <span className='label'>{current}</span>
-            </div>
-            <div className='horizontal'>
-              <div className='vertical'>
-                <span className='link'>BC</span>
-                <span className='link'>SC</span>
-              </div>
-              <div className='vertical'>
-                <span className='link'>BC</span>
-                <span className='link'>SC</span>
-              </div>
-              <div className='vertical'>
-                <button className='ff_button nav' onClick={fastForward}>
-                  FF
-                </button>
-                <button className='rew_button nav' onClick={reWind}>
-                  REW
-                </button>
-              </div>
-              <div className='vertical'>
-                <div className='horizontal'>
-                  <span className='track_button'>1</span>
-                  <span className='track_button'>2</span>
-                  <span className='track_button'>3</span>
-                </div>
-                <div className='horizontal'>
-                  <span className='track_button'>4</span>
-                  <span className='track_button'>5</span>
-                  <span className='track_button'>6</span>
-                </div>
-              </div>
-              <div className='vertical'>
-                <span className='link'>TUNE</span>
-                <button className='link' ref={ref} onClick={toggleSound}>
-                  {" "}
-                  {isPlaying ? "PAUSE" : "PLAY"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Html>
-    </mesh>
-  ));
-
-  return (
-    <>
-      <Suspense fallback={null}>
-        <PositionalAudio url={url} ref={sound} />
-
-        {/* <Analyzer sound={sound} /> */}
-      </Suspense>
-      <AudioSwitch />
-    </>
-  );
+            <DashBoard
+                ffaction={handleNextTrack}
+                rewaction={handlePrevTrack}
+                toggleaction={toggleSound}
+                trackDisplay={display}
+                input={" "}
+                label={isPlaying ? "PAUSE" : "PLAY"}
+                button1={() =>
+                    handleColorChange("background", {
+                        background: "rgb(195, 200, 186)",
+                        foreground: "rgb(122, 154, 214)",
+                        characters: ".,_#▓░^+$~#`}{*'t",
+                    })
+                }
+                button2={() =>
+                    handleColorChange("background", {
+                        background: "rgb(0, 0, 0)",
+                        foreground: "rgb(0, 150, 100)",
+                        characters: ".#`_{,*~!",
+                    })
+                }
+                button3={() =>
+                    handleColorChange("background", {
+                        background: "rgb(170, 170, 170)",
+                        foreground: "rgb(100, 0, 255)",
+                        characters: ".$*_~=+/§",
+                    })
+                }
+                button4={() =>
+                    handleColorChange("background", {
+                        background: "rgb(112, 95, 95)",
+                        foreground: "rgb(175, 236, 237)",
+                        characters: ".,░_^{«~▄#`_!*",
+                    })
+                }
+                button5={() =>
+                    handleColorChange("background", {
+                        background: "rgb(38, 109, 133)",
+                        foreground: "rgb(176, 200, 209)",
+                        characters: "._╬_{,></*~!",
+                    })
+                }
+                button6={() =>
+                    handleColorChange("background", {
+                        background: "rgb(163, 95, 163)",
+                        foreground: "rgb(0, 0, 255)",
+                        characters: ".,░_^{▄«~#`_!*",
+                    })
+                }
+            ></DashBoard>
+        </>
+    );
 }

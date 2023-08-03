@@ -1,53 +1,68 @@
 import React, { Suspense, useRef, useState, useEffect } from "react";
 import { PositionalAudio } from "@react-three/drei";
 import DashBoard from "../ui/dashboard/DashBoard.jsx";
-import Analyzer from "../Analyzer.jsx";
+import AsciiEffect from "../AsciiEffect.jsx";
 import "../ui/dashboard/DashBoard.css";
 
-export default function PlaySound() {
-    const tracks = [
-        "/tracks/Asphalt.mp3",
-        "/tracks/City Report.mp3",
-        "/tracks/Morning Shift.mp3",
-        "/tracks/Skyline.mp3",
-        "/tracks/Skyline (Privacy Remix).mp3",
-    ];
+const tracks = [
+    "/tracks/Asphalt.mp3",
+    "/tracks/City Report.mp3",
+    "/tracks/Morning Shift.mp3",
+    "/tracks/Skyline.mp3",
+    "/tracks/Skyline (Privacy Remix).mp3",
+];
 
+const colorPalettes = [
+    {
+        background: "rgb(195, 200, 186)",
+        foreground: "rgb(122, 154, 214)",
+        characters: ".,_#▓░^+$~#`}{*'t",
+    },
+    {
+        background: "rgb(0, 0, 0)",
+        foreground: "rgb(0, 150, 100)",
+        characters: ".#`_{,*~!",
+    },
+    {
+        background: "rgb(75, 75, 75)",
+        foreground: "rgb(200, 220, 255)",
+        characters: ".*~_^`/§▄(#`^{!}=+",
+    },
+    {
+        background: "rgb(112, 95, 95)",
+        foreground: "rgb(175, 236, 237)",
+        characters: ".,░_^{«~▄#`_!*",
+    },
+    {
+        background: "rgb(38, 109, 133)",
+        foreground: "rgb(176, 200, 209)",
+        characters: "._╬_{,></*~!",
+    },
+    {
+        background: "rgb(135, 135, 160)",
+        foreground: "rgb(0, 0, 200)",
+        characters: ".,░_▄«~#`_!*",
+    },
+    // Add more color palettes as needed
+];
+
+export default function PlaySound() {
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const sound = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isChangingTrack, setIsChangingTrack] = useState(false);
-    const [foreground, setForeground] = useState("rgb(0, 0, 255)"); // Default foreground color (red)
-    const [background, setBackground] = useState("rgb(190, 190, 190)"); // Default background color (cyan)
-    const [characters, setCharacters] = useState(
-        ".,*~!#`_=+/†º•ª§∞πøˆ¨¥†®°´}{"
-    );
+    const [colorPalette, setColorPalette] = useState(colorPalettes[0]);
 
-    const [currentTime, setCurrentTime] = useState(0); // State to keep track of currentTime
+    const [currentTime, setCurrentTime] = useState(0);
 
     useEffect(() => {
-        if (sound.current) {
+        if (sound.current && isPlaying) {
             sound.current.currentTime = currentTime; // Set the currentTime of the audio
             sound.current.play();
+        } else if (sound.current) {
+            sound.current.pause();
         }
     }, [currentTime, isPlaying]);
 
-    useEffect(() => {
-        if (sound.current) {
-            sound.current.currentTime = currentTime;
-            sound.current.onpause = () => {
-                setIsPlaying(false);
-            };
-            sound.current?.play();
-        }
-    }, [currentTime]);
-
-    // useEffect(() => {
-    //     sound.current = sound.current || {}; // Ensure sound.current is an object
-    //     sound.current.currentTime = 0; // Set an initial value for currentTime if needed
-    // }, []);
-
-    // New function to handle audio play and pause
     const playPauseAudio = () => {
         setIsPlaying((prevIsPlaying) => {
             const newIsPlaying = !prevIsPlaying;
@@ -56,42 +71,31 @@ export default function PlaySound() {
             } else {
                 sound.current.pause();
             }
+            console.log("Is playing:", newIsPlaying);
             return newIsPlaying;
         });
     };
 
-    // New function to handle track changes
     const changeTrack = (nextTrackIndex) => {
         sound.current.pause();
-        setIsChangingTrack(true); // Set the flag to true when track change is in progress
+        setIsPlaying(false);
+        setCurrentTime(0);
         setCurrentTrackIndex(
             (prevIndex) => (nextTrackIndex + tracks.length) % tracks.length
         );
     };
 
-    // useEffect hook to handle audio playback when the track changes
     useEffect(() => {
-        if (isChangingTrack) {
+        if (isPlaying) {
             sound.current?.play();
-            setIsChangingTrack(false); // Reset the flag after track change is completed
         }
-    }, [isChangingTrack]);
+    }, [isPlaying]);
 
-    const handleColorChange = (colorType, palette) => {
-        switch (colorType) {
-            case "background":
-                setBackground(palette.background);
-                setForeground(palette.foreground);
-                setCharacters(palette.characters);
-                break;
-            // Add more cases for additional color options if needed
-            default:
-                break;
-        }
+    const handleColorChange = (palette) => {
+        setColorPalette(palette);
     };
-    const url = tracks[currentTrackIndex];
-    console.log(currentTrackIndex);
 
+    const url = tracks[currentTrackIndex];
     const display = url.replace("/tracks/", "").replace(".mp3", "");
 
     return (
@@ -99,16 +103,16 @@ export default function PlaySound() {
             <Suspense fallback={null}>
                 <PositionalAudio
                     url={tracks[currentTrackIndex]}
-                    ref={(audio) => (sound.current = audio)} // Update the sound.current reference
+                    ref={(audio) => (sound.current = audio)}
                     onEnded={() => {
-                        setCurrentTime(0); // Reset currentTime to 0 when audio ends
+                        changeTrack(currentTrackIndex + 1);
                     }}
                 />
-                <Analyzer
+                <AsciiEffect
                     sound={sound}
-                    backGround={background}
-                    foreGround={foreground}
-                    characTers={characters}
+                    backGround={colorPalette.background}
+                    foreGround={colorPalette.foreground}
+                    characTers={colorPalette.characters}
                 />
             </Suspense>
 
@@ -118,49 +122,14 @@ export default function PlaySound() {
                 toggleaction={playPauseAudio}
                 trackDisplay={display}
                 input={" "}
-                button1={() =>
-                    handleColorChange("background", {
-                        background: "rgb(195, 200, 186)",
-                        foreground: "rgb(122, 154, 214)",
-                        characters: ".,_#▓░^+$~#`}{*'t",
-                    })
-                }
-                button2={() =>
-                    handleColorChange("background", {
-                        background: "rgb(0, 0, 0)",
-                        foreground: "rgb(0, 150, 100)",
-                        characters: ".#`_{,*~!",
-                    })
-                }
-                button3={() =>
-                    handleColorChange("background", {
-                        background: "rgb(170, 170, 170)",
-                        foreground: "rgb(100, 0, 255)",
-                        characters: ".$*_~=+/§",
-                    })
-                }
-                button4={() =>
-                    handleColorChange("background", {
-                        background: "rgb(112, 95, 95)",
-                        foreground: "rgb(175, 236, 237)",
-                        characters: ".,░_^{«~▄#`_!*",
-                    })
-                }
-                button5={() =>
-                    handleColorChange("background", {
-                        background: "rgb(38, 109, 133)",
-                        foreground: "rgb(176, 200, 209)",
-                        characters: "._╬_{,></*~!",
-                    })
-                }
-                button6={() =>
-                    handleColorChange("background", {
-                        background: "rgb(163, 95, 163)",
-                        foreground: "rgb(0, 0, 255)",
-                        characters: ".,░_^{▄«~#`_!*",
-                    })
-                }
-            ></DashBoard>
+                button1={() => handleColorChange(colorPalettes[0])}
+                button2={() => handleColorChange(colorPalettes[1])}
+                button3={() => handleColorChange(colorPalettes[2])}
+                button4={() => handleColorChange(colorPalettes[3])}
+                button5={() => handleColorChange(colorPalettes[4])}
+                button6={() => handleColorChange(colorPalettes[5])}
+                // Add more buttons with color palettes as needed
+            />
         </>
     );
 }

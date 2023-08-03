@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { useData } from "./DataContext";
 import { AsciiRenderer } from "@react-three/drei";
 
-export default function Analyzer({
+export default function AsciiEffect({
     sound,
     backGround,
     foreGround,

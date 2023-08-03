@@ -1,7 +1,7 @@
-/* @font-face {
-  font-family: "IBMPlex", "Sans Medium";
-  src: url("../fonts/IBMPlexSans-Medium.woff");
-} */
+@font-face {
+  font-family: "Ticking Timebomb bb, italic";
+  src: url("./ticking-timebomb-bb.italic.ttf");
+}
 
 :root {
   --accent: rgb(161, 219, 231);
@@ -15,7 +15,14 @@
   width: 100vw;
   height: 100vh;
 }
+#logo {
+  width: 20px;
+  /* position: absolute;
+  top: 0;
+  right: 0; */
 
+
+}
 /* .playsound-cont {
   position: absolute;
   right: -300px;
@@ -29,7 +36,7 @@
   background-color: rgb(142, 142, 142);
   border: 1px solid var(--outline);
   border-radius: 10px;
-  font-family: 'IBM Plex Sans', sans-serif;
+font-family: 'Audiowide', cursive;
   padding: 3px;
   margin: 10px;
   color: var(--sub-text);
@@ -55,6 +62,7 @@
   border: 0.5px solid black;
   border-radius: 2px;
   cursor: pointer;
+  font-size: 0.8em;
 }
 
 .casette {
@@ -74,16 +82,18 @@
 .label {
   width: 200px;
   height: 25px;
-  padding-top: 1px;
+  padding-top: 3px;
   border: 0.5px solid black;
   border-radius: 2px;
   background: var(--secondary);
   /* color: white; */
   overflow: hidden;
+  font-family: "Ticking Timebomb bb, italic";
+  font-size: 1.3em;
+  text-shadow: 0px 0px 2px var(--accent);
 }
 
 .scrollbar {
-
   position: relative;
   animation: 15s scroll linear infinite;
 }
@@ -116,7 +126,7 @@ span {
   height: 30px;
   border-radius: 2px;
   padding-top: 4px;
-  color: var(--accent);
+  color: var(--main-text);
   font-family: 'Audiowide', cursive;
   margin: 3px 1px;
 }
@@ -137,13 +147,9 @@ button:hover {
   background-color: var(--accent);
 }
 
-/* button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-} */
 .link:hover {
     border-color: var(--accent);
-    background-color: var(--accent);
+    transition-duration: 200ms;
     background-blend-mode: lighten;
 }
 #toggleIcon {
@@ -151,13 +157,40 @@ button:focus-visible {
   position: relative;
   width: 35px;
 }
+.mini-box {
+  height: 14px;
+  width: 5px;
+  margin: 1px;
+  background-color: var(--secondary);
+}
+.flitter {
+  overflow: hidden;
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  animation: 8s flitter ease-in-out infinite;
+  
+}
 
 @keyframes scroll {
   0% {
-    left: 200px;
+    left: -200px;
   }
 
   100% {
-    left: -200px;
+    left: 200px;
   }
+}
+
+@keyframes flitter {
+    0% {
+        left: -150px;
+      }
+    
+      30% {
+        left: 150px;
+      }
+      100% {
+        left: 150px;
+      }
 }

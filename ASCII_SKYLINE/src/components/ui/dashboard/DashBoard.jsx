@@ -18,14 +18,20 @@ const DashBoard = ({
 }) => {
     return (
         <>
-            <Html fullscreen>
+            <Html fullscreen zIndexRange={[90, 0]}>
+                <div className="top-right"></div>
                 <div className="container">
                     <div className="vertical">
                         <div className="horizontal">
-                            <span className="casette">SKYLINE</span>
+                            <span className="casette">
+                                <span className="flitter mini-box"></span>
+                                SKYLINE
+                            </span>
                             <span className="label">
                                 <span className="scrollbar">
-                                    {trackDisplay}
+                                    <span className="blink">
+                                        {trackDisplay}
+                                    </span>
                                 </span>
                             </span>
                         </div>
@@ -95,7 +101,13 @@ const DashBoard = ({
                                 </div>
                             </div>
                             <div className="vertical">
-                                <span className="link">TUNE</span>
+                                <span className="link">
+                                    {" "}
+                                    <img
+                                        id="logo"
+                                        src="src/assets/Ozelot_Logo_Final_StefanoBona_2022.png"
+                                    ></img>
+                                </span>
                                 <span className="link" onClick={toggleaction}>
                                     {inner}
                                     {/* {label} */}
